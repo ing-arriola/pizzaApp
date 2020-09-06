@@ -8,10 +8,20 @@ const Ingredients = () => {
   const [userIngredients, setUserIngredients] = useState([]);
 
   const addIngredientHandler = (item) => {
-    setUserIngredients((prevItems) => [
-      ...prevItems,
-      { id: Math.random().toString(), ...item },
-    ]);
+    fetch("https://hooksproject-6adb7.firebaseio.com/ingredients.json", {
+      method: "POST",
+      body: JSON.stringify({ item }),
+      headers: { "Content-Type": "application/json" },
+    })
+      .then((res) => {
+        return res.json();
+      })
+      .then((res) => {
+        setUserIngredients((prevItems) => [
+          ...prevItems,
+          { id: res.name, ...item },
+        ]);
+      });
   };
   return (
     <div className="App">
