@@ -16,8 +16,8 @@ const Ingredients = () => {
           console.log(key);
           loadedItems.push({
             id: key,
-            title: resData[key].item.title,
-            amount: resData[key].item.amount,
+            title: resData[key].title,
+            amount: resData[key].amount,
           });
         }
         setUserIngredients(loadedItems);
@@ -31,7 +31,7 @@ const Ingredients = () => {
   const addIngredientHandler = (item) => {
     fetch("https://hooksproject-6adb7.firebaseio.com/ingredients.json", {
       method: "POST",
-      body: JSON.stringify({ item }),
+      body: JSON.stringify(item),
       headers: { "Content-Type": "application/json" },
     })
       .then((res) => {
