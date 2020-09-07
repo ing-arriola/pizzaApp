@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useCallback } from "react";
 
 import IngredientForm from "./IngredientForm";
 import Search from "./Search";
@@ -24,6 +24,10 @@ const Ingredients = () => {
       });
   }, []); //brackets are the second argument which defines how often this useEffect hook will be executed
 
+  const filteredItems = useCallback((filtedItems) => {
+    setUserIngredients(filtedItems);
+  }, []);
+
   const addIngredientHandler = (item) => {
     fetch("https://hooksproject-6adb7.firebaseio.com/ingredients.json", {
       method: "POST",
@@ -45,7 +49,7 @@ const Ingredients = () => {
       <IngredientForm addIngredient={addIngredientHandler} />
 
       <section>
-        <Search />
+        <Search onLoadItems={filteredItems} />
         <IngredientsList
           ingredients={userIngredients}
           onRemoveItem={() => {}}
