@@ -6,6 +6,7 @@ import IngredientsList from "./IngredientList";
 
 const Ingredients = (props) => {
   const [userIngredients, setUserIngredients] = useState([]);
+  const [isLoading, setIsLoading] = useState(false);
 
   useEffect(() => {
     fetch("https://hooksproject-6adb7.firebaseio.com/ingredients.json")
@@ -29,6 +30,7 @@ const Ingredients = (props) => {
   }, []);
 
   const addIngredientHandler = (item) => {
+    setIsLoading(true);
     fetch("https://hooksproject-6adb7.firebaseio.com/ingredients.json", {
       method: "POST",
       body: JSON.stringify(item),
@@ -43,6 +45,7 @@ const Ingredients = (props) => {
           { id: res.name, ...item },
         ]);
       });
+    setIsLoading(false);
   };
 
   const removeItem = (itemId) => {
@@ -60,7 +63,10 @@ const Ingredients = (props) => {
 
   return (
     <div className="App">
-      <IngredientForm addIngredient={removeItem} />
+      <IngredientForm
+        loading={isLoading}
+        addIngredient={addIngredientHandler}
+      />
 
       <section>
         <Search onLoadItems={filteredItems} />
