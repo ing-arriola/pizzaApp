@@ -4,7 +4,7 @@ import IngredientForm from "./IngredientForm";
 import Search from "./Search";
 import IngredientsList from "./IngredientList";
 
-const Ingredients = () => {
+const Ingredients = (props) => {
   const [userIngredients, setUserIngredients] = useState([]);
 
   useEffect(() => {
@@ -44,15 +44,29 @@ const Ingredients = () => {
         ]);
       });
   };
+
+  const removeItem = (itemId) => {
+    fetch(
+      `https://hooksproject-6adb7.firebaseio.com/ingredients/${itemId}.json`,
+      {
+        method: "DELETE",
+      }
+    ).then((res) => {
+      setUserIngredients((prevItems) =>
+        prevItems.filter((item) => item.id !== itemId)
+      );
+    });
+  };
+
   return (
     <div className="App">
-      <IngredientForm addIngredient={addIngredientHandler} />
+      <IngredientForm addIngredient={removeItem} />
 
       <section>
         <Search onLoadItems={filteredItems} />
         <IngredientsList
           ingredients={userIngredients}
-          onRemoveItem={() => {}}
+          onRemoveItem={removeItem}
         />
       </section>
     </div>
